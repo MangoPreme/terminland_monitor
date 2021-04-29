@@ -3,7 +3,7 @@ var webhook = new discord_webhook.Webhook("https://discord.com/api/webhooks/8374
 
 function notify() {
     const msg = new discord_webhook.MessageBuilder()
-        .setText("<@227436577838727168>")
+        .setText("@everyone")
         .setURL("https://www.terminland.de/Impfzentrum-Lippe/default.aspx?m=35258&ll=SE5TF&dpp=0&dlgid=4&step=3&dlg=1&a1628343864=1641941024&a1628345572=1628346909&a1628577303=1628578003&css=1")
         .setName("Appointment Monitor")
         .setTitle("Appointments live")
