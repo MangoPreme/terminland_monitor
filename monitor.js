@@ -24,21 +24,30 @@ function monitor() {
     return new Promise(async (resolve, reject) => {
         function get() {
             return new Promise((resolve, reject) => {
-                request.get({ url: "https://www.terminland.de/Impfzentrum-Lippe/default.aspx?m=35258&ll=SE5TF&dpp=0&dlgid=4&step=3&dlg=1&a1628343864=1641941024&a1628345572=1628346909&a1628577303=1628578003&css=1", headers: headers }, (err, res, body) => {
+                request.get({ url: "https://www.terminland.de/Impfzentrum-Lippe/default.aspx?m=35258&ll=SE5TF&dpp=0&dlgid=4&step=3&dlg=1&a1628343864=1641941024&a1628345572=1628346909&a1628577303=1628578003&css=1", headers: headers }, async (err, res, body) => {
                     if (err) {
                         console.log("err")
                     }
 
                     let response = checkSite(res.body)
 
-                    if (response) {
-                        logger.status("Appointments unavailable")
+                    switch (response) {
+                        case "unavailable":
+                            logger.status("Appointments unavailable")
 
-                        return reject()
-                    } else {
-                        logger.success("Appointments live, notifying")
+                            return reject()
 
-                        return resolve()
+                        case "live":
+                            logger.success("Appointments live, notifying")
+
+                            return resolve()
+
+                        default:
+                            discord.error(response)
+
+                            await timeout(20000)
+
+                            return reject()
                     }
                 })
             })
@@ -56,13 +65,18 @@ function monitor() {
 }
 
 function checkSite(html) {
-    let $ = cheerio.load(html)
+    try {
+        let $ = cheerio.load(html)
 
-    let unavailable = $("#fsHinweis > div.panel-body > b:nth-child(10) > span")
+        let unavailable = $("#fsHinweis > div.panel-body > b:nth-child(10) > span")
 
-    if (unavailable && unavailable.html() != undefined && unavailable.html().includes("späteren Zeitpunkt")) {
-        return true;
-    } return false;
+        if (unavailable && unavailable.html() != undefined && unavailable.html().includes("späteren Zeitpunkt")) {
+            return "unavailable";
+        } return "live";
+    } catch (error) {
+        console.log(error)
+        return error
+    }
 }
 
 function timeout(ms) {
