@@ -1,5 +1,5 @@
 const discord_webhook = require("webhook-discord");
-var webhook = new discord_webhook.Webhook("https://discord.com/api/webhooks/837449313625309254/eQW_8aL-LAO8y87aHGN9Huw2d-3ihj1DaExnYNM2_7PZc9Abhmj2D38COiY6S6JQcVbc")
+var webhook = new discord_webhook.Webhook("https://discord.com/api/webhooks/837668737703870464/NAZ9sHOW-lCr1L0w2ECXPdapousAOJxKbqQP8hslb1x9_BFrk9aU22gIilEZ5UnKy7Xb")
 
 function notify() {
     const msg = new discord_webhook.MessageBuilder()

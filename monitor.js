@@ -66,11 +66,11 @@ function monitor() {
 
 function checkSite(html) {
     try {
-        let $ = cheerio.load(html)
+        //let $ = cheerio.load(html)
 
-        let unavailable = $("#fsHinweis > div.panel-body > b:nth-child(10) > span")
+        //let unavailable = $("#fsHinweis > div.panel-body > b:nth-child(10) > span")
 
-        if (unavailable && unavailable.html() != undefined && unavailable.html().includes("späteren Zeitpunkt")) {
+        if (html && html.includes("Schauen Sie gerne zu einem späteren Zeitpunkt nocheinmal vorbei")) {
             return "unavailable";
         } return "live";
     } catch (error) {
@@ -89,6 +89,8 @@ async function run() {
     await monitor()
 
     discord.notify()
+
+    logger.status("Monitor finished")
 }
 
 run()
